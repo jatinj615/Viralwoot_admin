@@ -24,7 +24,7 @@
         
         <div class="main-content container-fluid">
           <div class="row">
-            <div class="col-xs-8 col-md-8 col-md-offset-2">
+            <div class="col-xs-10 col-md-12">
               <div class="panel panel-default">
                 <div class="panel-heading"></div>
                 <div class="panel-body">
@@ -50,9 +50,9 @@
                           </span>
                       </div>
                   </div>
-                  <div class="col-sm-12">
+              <div class="col-sm-12">
               <div class="panel panel-default panel-table">
-                <div class="panel-heading">User Tables
+                <div class="panel-heading">Users Table
                   
                 </div>
                 <div class="panel-body">
@@ -67,6 +67,40 @@
                       </tr>
                     </thead>
                     <tbody id="tbody">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+                <div class="col-sm-12">
+              <div class="panel panel-default panel-table">
+                <div class="panel-heading">Brands Table
+                  
+                </div>
+                <div class="panel-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>User ID</th>
+                        <th>Brand ID</th>
+                        <th>Name</th>
+                        <th>Pinterest</th>
+                        <th>Facebook</th>
+                        <th>Twitter</th>
+                        <th>Instagram</th>
+                        <th>ETSY</th>
+                        <th>Stripe Customer</th>
+                        <th>Stripe Subscription</th>
+                        <th>Credit</th>
+                        <th>Status</th>
+                        <th>Join Date</th>
+                        <th>TZ</th>
+                        <th>Plan Start</th>
+                        <th>Plan End</th>
+                       
+                      </tr>
+                    </thead>
+                    <tbody id="tbodybrands">
                     </tbody>
                   </table>
                 </div>
@@ -99,6 +133,8 @@
       	prettyPrint();
         // $('#myTable').DataTable();
         $('#search').click(function(){
+          $('#tbody').empty();
+          $('#tbodybrands').empty();
           var search_token = encodeURIComponent($("#search_token").val());
           var field = $('#sel1').find(":selected").text();
           
@@ -107,8 +143,17 @@
               var obj = $.parseJSON(data);
               if(obj != null && obj.length>0){
               for (var i = 0; i < obj.length; i++) {
-                console.log(obj);
-                // $('#tbody').append('<tr><td>'+obj[i].id+'</td><td>'+obj[i].fname+' '+obj[i].lname+'</td><td>'+obj[i].email+'</td><td>'+obj[i].joindate+'</td></tr>');
+                if(field == "Name"){
+                  $('#tbody').append('<tr><td>'+obj[i].id+'</td><td>'+obj[i].fname+' '+obj[i].lname+'</td><td>'+obj[i].email+'</td><td>'+obj[i].joindate+'</td></tr>');
+                }
+                else if(obj[i].brands == 0){
+                  $('#tbody').append('<tr><td>'+obj[i].id+'</td><td>'+obj[i].fname+' '+obj[i].lname+'</td><td>'+obj[i].email+'</td><td>'+obj[i].joindate+'</td></tr>');  
+                }
+                else if (obj[i].brands == 1) {
+                  // if()
+                  $('#tbody').append('<tr><td>'+obj[i].masterid+'</td><td>'+obj[i].fname+' '+obj[i].lname+'</td><td>'+obj[i].email+'</td><td>'+obj[i].joindate+'</td></tr>');
+                  $('#tbodybrands').append('<tr><td>'+obj[i].masterid+'</td><td>'+obj[i].id+'</td><td>'+obj[i].name+'</td><td>'+obj[i].pinterest+'</td><td>'+obj[i].facebook+'</td><td>'+obj[i].twitter+'</td><td>'+obj[i].instagram+'</td><td>'+obj[i].etsy+'</td><td>'+obj[i].stripe_customer+'</td><td>'+obj[i].stripe_subscription+'</td><td>'+obj[i].credit+'</td><td>'+obj[i].status+'</td><td>'+obj[i].joindate+'</td><td>'+obj[i].tz+'</td><td>'+obj[i].plan_start+'</td><td>'+obj[i].plan_end+'</td></tr>');
+                }
               }  
               }
               
