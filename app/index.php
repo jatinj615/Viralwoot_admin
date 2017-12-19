@@ -50,18 +50,28 @@
                           </span>
                       </div>
                   </div>
-                  <!-- <table id="myTable">
+                  <div class="col-sm-12">
+              <div class="panel panel-default panel-table">
+                <div class="panel-heading">User Tables
+                  
+                </div>
+                <div class="panel-body">
+                  <table class="table">
                     <thead>
                       <tr>
-                        <th>header</th>
+                        <th style="width:10%;">ID</th>
+                        <th style="width:30%;">Name</th>
+                        <th style="width:30%;">Email</th>
+                        <th>Join Date</th>
+                       
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td>data</td>
-                      </tr>
+                    <tbody id="tbody">
                     </tbody>
-                  </table> -->
+                  </table>
+                </div>
+              </div>
+            </div>
                 </div>
                 
               </div>
@@ -87,13 +97,21 @@
       	
       	//Runs prettify
       	prettyPrint();
-        $('#myTable').DataTable();
+        // $('#myTable').DataTable();
         $('#search').click(function(){
-          var search_token = $("#search_token").val();
+          var search_token = encodeURIComponent($("#search_token").val());
           var field = $('#sel1').find(":selected").text();
+          
           if(search_token != null){
             $.post("api.php?search_token="+search_token+"&field="+field, function(data,status){
-              console.log(data);
+              var obj = $.parseJSON(data);
+              if(obj != null && obj.length>0){
+              for (var i = 0; i < obj.length; i++) {
+                console.log(obj);
+                // $('#tbody').append('<tr><td>'+obj[i].id+'</td><td>'+obj[i].fname+' '+obj[i].lname+'</td><td>'+obj[i].email+'</td><td>'+obj[i].joindate+'</td></tr>');
+              }  
+              }
+              
             });
           }
         });
