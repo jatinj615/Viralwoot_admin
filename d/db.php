@@ -5,7 +5,7 @@
 	class DatabaseConnect
 	{
 		public function connect() {
-			$connect_var = mysql_connect('localhost','root','1234');
+			$connect_var = mysql_connect('104.155.160.210','teampass','w4FEjHEWPpXxrUdT');
 			mysql_select_db('viralwoot');
 			if(!$connect_var){
 				echo "Connection Failed";

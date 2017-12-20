@@ -95,7 +95,6 @@
                         <th>Join Date</th>
                         <th>Plan Start</th>
                         <th>Plan End</th>
-                        <th>Acounts Info</th>
                        
                       </tr>
                     </thead>
@@ -123,6 +122,35 @@
                       </tr>
                     </thead>
                     <tbody id="tbodyaccounts">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="panel panel-default panel-table">
+                <div class="panel-heading">Bots Table
+                </div>
+                <div class="panel-heading pull-left" id="totalbots">
+                </div>
+                <div class="panel-heading pull-right" id="activebots"> 
+                  
+                </div>
+                <div class="panel-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Bot Id</th>
+                        <th>Bot Name</th>
+                        <th>Bot Network</th>
+                        <th>Status</th>
+                        <th>Category</th>
+                        <th>Created On</th>
+                        <th>Bot Last Run</th>
+                        <th>Bot Type</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbodybots">
                     </tbody>
                   </table>
                 </div>
@@ -157,38 +185,48 @@
         $('#search').click(function(){
           $('#tbody').empty();
           $('#tbodybrands').empty();
+          $('#tbodybots').empty();
+          $('#tbodyaccounts').empty();
           var search_token = encodeURIComponent($("#search_token").val());
           var field = $('#sel1').find(":selected").text();
           
           if(search_token != null){
             $.post("api.php?search_token="+search_token+"&field="+field, function(data,status){
+              //console.log(data);
               var obj = $.parseJSON(data);
-              if(obj != null && obj.length>0){
-              for (var i = 0; i < obj.length; i++) {
+              // console.log(obj);
+              if(obj['UBA'] != null && obj['UBA'].length>0){
+              for (var i = 0; i < obj['UBA'].length; i++) {
                 if(field == "Name"){
-                  $('#tbody').append('<tr><td>'+obj[i].id+'</td><td>'+obj[i].fname+' '+obj[i].lname+'</td><td>'+obj[i].email+'</td><td>'+obj[i].joindate+'</td></tr>');
+                  $('#tbody').append('<tr><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].fname+' '+obj['UBA'][i].lname+'</td><td>'+obj['UBA'][i].email+'</td><td>'+obj['UBA'][i].joindate+'</td></tr>');
                 }
-                else if(obj[i].brands == 0){
-                  $('#tbody').append('<tr><td>'+obj[i].id+'</td><td>'+obj[i].fname+' '+obj[i].lname+'</td><td>'+obj[i].email+'</td><td>'+obj[i].joindate+'</td></tr>');  
+                else if(obj['UBA'][i].brands == 0){
+                  $('#tbody').append('<tr><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].fname+' '+obj['UBA'][i].lname+'</td><td>'+obj['UBA'][i].email+'</td><td>'+obj['UBA'][i].joindate+'</td></tr>');  
                 }
-                else if (obj[i].brands == 1) {
+                else if (obj['UBA'][i].brands == 1) {
                   // if()
-                  $('#tbody').append('<tr><td>'+obj[i].masterid+'</td><td>'+obj[i].fname+' '+obj[i].lname+'</td><td>'+obj[i].email+'</td><td>'+obj[i].joindate+'</td></tr>');
-                  $('#tbodybrands').append('<tr><td>'+obj[i].masterid+'</td><td>'+obj[i].id+'</td><td>'+obj[i].name+'</td><td>'+obj[i].pname+'</td><td>'+'$'+obj[i].amount+'</td><td>'+obj[i].type+'</td><td>'+obj[i].tname+'</td><td>'+obj[i].stripe_customer+'</td><td>'+obj[i].stripe_subscription+'</td><td>'+obj[i].credits+'</td><td>'+obj[i].status+'</td><td>'+obj[i].joindate+'</td><td>'+obj[i].plan_start+'</td><td>'+obj[i].plan_end+'</td><td><button onclick="viewAccounts('+obj[i].masterid+','+obj[i].id+','+obj[i].pinterest+','+obj[i].facebook+','+obj[i].twitter+','+obj[i].instagram+','+obj[i].etsy+')">View</button></td></tr>');
+                  $('#tbody').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].fname+' '+obj['UBA'][i].lname+'</td><td>'+obj['UBA'][i].email+'</td><td>'+obj['UBA'][i].joindate+'</td></tr>');
+                  $('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].joindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td></tr>');
+                  $('#tbodyaccounts').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].pinterest+'</td><td>'+obj['UBA'][i].facebook+'</td><td>'+obj['UBA'][i].twitter+'</td><td>'+obj['UBA'][i].instagram+'</td><td>'+obj['UBA'][i].etsy+'</td></tr>');
                 }
-              }  
+              }
+              }
+              if(obj['BOT'] != null && obj['BOT'].length > 0){
+                $('#totalbots').html('Total Bots : '+obj['BOT'].length);
+                var activebots = 0;
+                for(var i = 0 ; i < obj['BOT'].length; i++){
+                  // console.log(obj['BOT'][i]);
+                  if(obj['BOT'][i].status == 0){
+                    activebots++;
+                  }
+                  $('#tbodybots').append('<tr><td>'+obj['BOT'][i].bot_id+'</td><td>'+obj['BOT'][i].bot_name+'</td><td>'+obj['BOT'][i].bot_network+'</td><td>'+obj['BOT'][i].status+'</td><td>'+obj['BOT'][i].cat_id+'</td><td>'+obj['BOT'][i].created_on+'</td><td>'+obj['BOT'][i].bot_last_run+'</td><td>'+obj['BOT'][i].bot_type+'</td></tr>');
+                }
+                $('#activebots').html('Active Bots : '+activebots);  
               }
             });
           }
         });
       });
-    </script>
-    <script>
-      function viewAccounts(id,brandid,pinterest,fb,twitter,insta,etsy){
-        //console.log(id);
-        $('#tbodyaccounts').empty();
-        $('#tbodyaccounts').append('<tr><td>'+id+'</td><td>'+brandid+'</td><td>'+pinterest+'</td><td>'+fb+'</td><td>'+twitter+'</td><td>'+insta+'</td><td>'+etsy+'</td></tr>');
-      }
     </script>
   </body>
 </html>

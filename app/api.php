@@ -12,7 +12,7 @@
 			$result = mysql_query($query);
 			if($result && mysql_num_rows($result)> 0){
 				while($row = mysql_fetch_assoc($result)){
-					$data[$i] = $row;
+					$data['UBA'][$i] = $row;
 					$i++;
 				}
 			}	
@@ -26,14 +26,23 @@
 				$result = mysql_query($query);
 				if($result && mysql_num_rows($result)>0){
 					while($row = mysql_fetch_assoc($result)){
-						$data[$i] = $row;
-						$data[$i]['brands'] = 1;
+						$data['UBA'][$i] = $row;
+						$data['UBA'][$i]['brands'] = 1;
 						$i++;
 					}	
 				}else{
 					while ($row = mysql_fetch_assoc($result)) {
-						$data[$i] = $row;
-						$data[$i]['brands'] = 0 ;
+						$data['UBA'][$i] = $row;
+						$data['UBA'][$i]['brands'] = 0 ;
+						$i++;
+					}
+				}
+				$i = 0;
+				$query = "SELECT bots.bot_id,bots.bot_name,bots.bot_network,bots.status,bots.cat_id,bots.created_on,bots.bot_last_run,bots.bot_type from bots,users where users.id=bots.masterid and users.email='".$search_token."'";
+				$result = mysql_query($query);
+				if($result && mysql_num_rows($result) > 0){
+					while($row = mysql_fetch_assoc($result)){
+						$data['BOT'][$i] = $row;
 						$i++;
 					}
 				}
@@ -47,14 +56,23 @@
 				$result = mysql_query($query);
 				if($result && mysql_num_rows($result)>0){
 					while($row = mysql_fetch_assoc($result)){
-						$data[$i] = $row;
-						$data[$i]['brands'] = 1;
+						$data['UBA'][$i] = $row;
+						$data['UBA'][$i]['brands'] = 1;
 						$i++;
 					}	
 				}else{
 					while ($row = mysql_fetch_assoc($result)) {
-						$data[$i] = $row;
-						$data[$i]['brands'] = 0 ;
+						$data['UBA'][$i] = $row;
+						$data['UBA'][$i]['brands'] = 0 ;
+						$i++;
+					}
+				}
+				$i = 0;
+				$query = "SELECT bot_id,bot_name,bot_network,status,cat_id,created_on,bot_last_run,bot_type from bots where masterid=".$search_token;
+				$result = mysql_query($query);
+				if($result && mysql_num_rows($result) > 0){
+					while($row = mysql_fetch_assoc($result)){
+						$data['BOT'][$i] = $row;
 						$i++;
 					}
 				}
@@ -66,8 +84,17 @@
 			//echo mysql_num_rows($result);
 			if($result && mysql_num_rows($result) > 0 ){
 				while ( $row = mysql_fetch_assoc($result) ) {
-					$data[$i] = $row;
-					$data[$i]['brands'] = 1;
+					$data['UBA'][$i] = $row;
+					$data['UBA'][$i]['brands'] = 1;
+					$i++;
+				}
+			}
+			$i = 0;
+			$query = "SELECT bot_id,bot_name,bot_network,status,cat_id,created_on,bot_last_run,bot_type from bots where brandid=".$search_token;
+			$result = mysql_query($query);
+			if($result && mysql_num_rows($result) > 0){
+				while($row = mysql_fetch_assoc($result)){
+					$data['BOT'][$i] = $row;
 					$i++;
 				}
 			}
