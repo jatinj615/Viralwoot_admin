@@ -24,11 +24,11 @@
         
         <div class="main-content container-fluid">
           <div class="row">
-            <div class="col-xs-10 col-md-12">
+            <div class="col-xs-8 col-md-12">
               <div class="panel panel-default">
                 <div class="panel-heading"></div>
                 <div class="panel-body">
-                  <div class="col-sm-11">
+                  <div class="col-sm-12">
                         <div class="input-group form-inline">
                           <div class="col-xs-7">
                             <input class="form-control" type="text" id="search_token">  
@@ -50,6 +50,8 @@
                           </span>
                       </div>
                   </div>
+                  <br>
+                  <br><br>
               <div class="col-sm-12">
               <div class="panel panel-default panel-table">
                 <div class="panel-heading">Users Table
@@ -187,6 +189,8 @@
           $('#tbodybrands').empty();
           $('#tbodybots').empty();
           $('#tbodyaccounts').empty();
+          $('#totalbots').empty();
+          $('#activebots').empty();
           var search_token = encodeURIComponent($("#search_token").val());
           var field = $('#sel1').find(":selected").text();
           
@@ -212,7 +216,7 @@
               }
               }
               if(obj['BOT'] != null && obj['BOT'].length > 0){
-                $('#totalbots').html('Total Bots : '+obj['BOT'].length);
+                $('#totalbots').append('Total Bots : '+obj['BOT'].length);
                 var activebots = 0;
                 for(var i = 0 ; i < obj['BOT'].length; i++){
                   // console.log(obj['BOT'][i]);
@@ -221,7 +225,7 @@
                   }
                   $('#tbodybots').append('<tr><td>'+obj['BOT'][i].bot_id+'</td><td>'+obj['BOT'][i].bot_name+'</td><td>'+obj['BOT'][i].bot_network+'</td><td>'+obj['BOT'][i].status+'</td><td>'+obj['BOT'][i].cat_id+'</td><td>'+obj['BOT'][i].created_on+'</td><td>'+obj['BOT'][i].bot_last_run+'</td><td>'+obj['BOT'][i].bot_type+'</td></tr>');
                 }
-                $('#activebots').html('Active Bots : '+activebots);  
+                $('#activebots').append('Active Bots : '+activebots);  
               }
             });
           }
