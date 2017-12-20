@@ -39,7 +39,7 @@
                                 <option>Name</option>
                                 <option>Email</option>
                                 <option>MasterId</option>
-                                <option>Brand Id</option>
+                                <option>BrandId</option>
                               </select>
   
                             </div>
@@ -72,7 +72,7 @@
                 </div>
               </div>
             </div>
-                <div class="col-sm-12">
+            <div class="col-sm-12">
               <div class="panel panel-default panel-table">
                 <div class="panel-heading">Brands Table
                   
@@ -84,23 +84,45 @@
                         <th>User ID</th>
                         <th>Brand ID</th>
                         <th>Name</th>
-                        <th>Pinterest</th>
-                        <th>Facebook</th>
-                        <th>Twitter</th>
-                        <th>Instagram</th>
-                        <th>ETSY</th>
+                        <th>Plan</th>
+                        <th>Plan Amount</th>
+                        <th>Plan Type</th>
+                        <th>Time Zone</th>
                         <th>Stripe Customer</th>
                         <th>Stripe Subscription</th>
                         <th>Credit</th>
                         <th>Status</th>
                         <th>Join Date</th>
-                        <th>TZ</th>
                         <th>Plan Start</th>
                         <th>Plan End</th>
+                        <th>Acounts Info</th>
                        
                       </tr>
                     </thead>
                     <tbody id="tbodybrands">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="panel panel-default panel-table">
+                <div class="panel-heading">Accounts Table
+                </div>
+                <div class="panel-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>User ID</th>
+                        <th>Brand ID</th>
+                        <th>Pinterest</th>
+                        <th>Facebook</th>
+                        <th>Twitter</th>
+                        <th>Instagram</th>
+                        <th>ETSY</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbodyaccounts">
                     </tbody>
                   </table>
                 </div>
@@ -152,15 +174,21 @@
                 else if (obj[i].brands == 1) {
                   // if()
                   $('#tbody').append('<tr><td>'+obj[i].masterid+'</td><td>'+obj[i].fname+' '+obj[i].lname+'</td><td>'+obj[i].email+'</td><td>'+obj[i].joindate+'</td></tr>');
-                  $('#tbodybrands').append('<tr><td>'+obj[i].masterid+'</td><td>'+obj[i].id+'</td><td>'+obj[i].name+'</td><td>'+obj[i].pinterest+'</td><td>'+obj[i].facebook+'</td><td>'+obj[i].twitter+'</td><td>'+obj[i].instagram+'</td><td>'+obj[i].etsy+'</td><td>'+obj[i].stripe_customer+'</td><td>'+obj[i].stripe_subscription+'</td><td>'+obj[i].credit+'</td><td>'+obj[i].status+'</td><td>'+obj[i].joindate+'</td><td>'+obj[i].tz+'</td><td>'+obj[i].plan_start+'</td><td>'+obj[i].plan_end+'</td></tr>');
+                  $('#tbodybrands').append('<tr><td>'+obj[i].masterid+'</td><td>'+obj[i].id+'</td><td>'+obj[i].name+'</td><td>'+obj[i].pname+'</td><td>'+'$'+obj[i].amount+'</td><td>'+obj[i].type+'</td><td>'+obj[i].tname+'</td><td>'+obj[i].stripe_customer+'</td><td>'+obj[i].stripe_subscription+'</td><td>'+obj[i].credits+'</td><td>'+obj[i].status+'</td><td>'+obj[i].joindate+'</td><td>'+obj[i].plan_start+'</td><td>'+obj[i].plan_end+'</td><td><button onclick="viewAccounts('+obj[i].masterid+','+obj[i].id+','+obj[i].pinterest+','+obj[i].facebook+','+obj[i].twitter+','+obj[i].instagram+','+obj[i].etsy+')">View</button></td></tr>');
                 }
               }  
               }
-              
             });
           }
         });
       });
+    </script>
+    <script>
+      function viewAccounts(id,brandid,pinterest,fb,twitter,insta,etsy){
+        //console.log(id);
+        $('#tbodyaccounts').empty();
+        $('#tbodyaccounts').append('<tr><td>'+id+'</td><td>'+brandid+'</td><td>'+pinterest+'</td><td>'+fb+'</td><td>'+twitter+'</td><td>'+insta+'</td><td>'+etsy+'</td></tr>');
+      }
     </script>
   </body>
 </html>
