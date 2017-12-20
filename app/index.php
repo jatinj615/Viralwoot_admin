@@ -158,6 +158,46 @@
                 </div>
               </div>
             </div>
+            <div class="col-sm-12">
+              <div class="panel panel-default panel-table">
+                <div class="panel-heading">Posts Table
+                </div>
+                  <div class="panel-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Pinterest Posts</th>
+                        <th>Facebook Posts</th>
+                        <th>Twitter Posts</th>
+                        <th>Instagram Posts</th>
+                        <th>Total Posts</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbodyposts">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="panel panel-default panel-table">
+                <div class="panel-heading">Last Transaction
+                </div>
+                  <div class="panel-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Amount</th>
+                        <th>Payment Type</th>
+                        <th>Date Time</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbodybill">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
                 </div>
                 
               </div>
@@ -191,6 +231,8 @@
           $('#tbodyaccounts').empty();
           $('#totalbots').empty();
           $('#activebots').empty();
+          $('#tbodyposts').empty();
+          $('#tbodybill').empty();
           var search_token = encodeURIComponent($("#search_token").val());
           var field = $('#sel1').find(":selected").text();
           
@@ -226,6 +268,17 @@
                   $('#tbodybots').append('<tr><td>'+obj['BOT'][i].bot_id+'</td><td>'+obj['BOT'][i].bot_name+'</td><td>'+obj['BOT'][i].bot_network+'</td><td>'+obj['BOT'][i].status+'</td><td>'+obj['BOT'][i].cat_id+'</td><td>'+obj['BOT'][i].created_on+'</td><td>'+obj['BOT'][i].bot_last_run+'</td><td>'+obj['BOT'][i].bot_type+'</td></tr>');
                 }
                 $('#activebots').append('Active Bots : '+activebots);  
+              }
+              if(obj['POST'] != null && obj['POST'].length > 0){
+                for(var i = 0 ; i < obj['POST'].length ; i++){
+                  var totalposts = obj['POST'][i].autopost_insta+obj['POST'][i].autopins+obj['POST'][i].autopost_fb+obj['POST'][i].autopost_tw;
+                  $('#tbodyposts').append('<tr><td>'+obj['POST'][i].autopins+'</td><td>'+obj['POST'][i].autopost_fb+'</td><td>'+obj['POST'][i].autopost_tw+'</td><td>'+obj['POST'][i].autopost_insta+'</td><td>'+totalposts+'</td></tr>');
+                }
+              }
+              if(obj['BILL'] != null && obj['BILL'].length > 0){
+                for(var i = 0 ; i < obj['BILL'].length ; i++){
+                  $('#tbodybill').append('<tr><td>'+obj['BILL'][i].amount+'</td><td>'+obj['BILL'][i].payment_type+'</td><td>'+obj['BILL'][i].datetime+'</td></tr>')
+                }
               }
             });
           }

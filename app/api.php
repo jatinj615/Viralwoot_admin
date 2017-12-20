@@ -84,6 +84,45 @@
 			if($result && mysql_num_rows($result) > 0 ){
 				while ( $row = mysql_fetch_assoc($result) ) {
 					$data['UBA'][$i] = $row;
+					$plan_start = $row['plan_start'].' 00:00:00';
+					$plan_start = date("Y-m-d H:i:s",strtotime($plan_start));
+					$plan_end = $row['plan_end'].' 00:00:00';
+					$plan_end = date("Y-m-d H:i:s",strtotime($plan_end));
+					$query = "SELECT id from autopins where brandid=".$search_token." and datetime BETWEEN '".$plan_start."' and '".$plan_end."'";
+					$result = mysql_query($query);
+					if($result && mysql_num_rows($result) > 0){
+						$data['POST'][$i]['autopins'] = mysql_num_rows($result);
+					}else{
+						$data['POST'][$i]['autopins'] = 0;
+					}
+					$query = "SELECT id from autopost_fb where brandid=".$search_token." and datetime BETWEEN '".$plan_start."' and '".$plan_end."'";
+					$result = mysql_query($query);
+					if($result && mysql_num_rows($result) > 0){
+						$data['POST'][$i]['autopost_fb'] = mysql_num_rows($result);
+					}else{
+						$data['POST'][$i]['autopost_fb'] = 0;
+					}
+					$query = "SELECT id from autopost_tw where brandid=".$search_token." and datetime BETWEEN '".$plan_start."' and '".$plan_end."'";
+					$result = mysql_query($query);
+					if($result && mysql_num_rows($result) > 0){
+						$data['POST'][$i]['autopost_tw'] = mysql_num_rows($result);
+					}else{
+						$data['POST'][$i]['autopost_tw'] = 0;
+					}
+					$query = "SELECT id from autopost_insta where brandid=".$search_token." and datetime BETWEEN '".$plan_start."' and '".$plan_end."'";
+					$result = mysql_query($query);
+					if($result && mysql_num_rows($result) > 0){
+						$data['POST'][$i]['autopost_insta'] = mysql_num_rows($result);
+					}else{
+						$data['POST'][$i]['autopost_insta'] = 0;
+					}
+					$query = "SELECT amount,payment_type,datetime from billing_logs where brandid=".$search_token." ORDER BY datetime DESC";
+					$result = mysql_query($query);
+					if($result && mysql_num_rows($result) > 0){
+						while ($row = mysql_fetch_assoc($result)) {
+							$data['BILL'][$i] = $row;	
+						}
+					}
 					$data['UBA'][$i]['brands'] = 1;
 					$i++;
 				}
