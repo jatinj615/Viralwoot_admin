@@ -21,7 +21,7 @@
 			$result = mysql_query($query);
 			//print_r(mysql_fetch_assoc($result));
 			if($result && mysql_num_rows($result)>0){
-				$query = "SELECT users.fname,users.lname,users.email,users.joindate,users.id,brands.masterid,brands.id,brands.name,brands.pinterest,brands.facebook,brands.twitter,brands.instagram,brands.etsy,brands.plan,brands.stripe_customer,brands.stripe_subscription,brands.credits,brands.status,brands.joindate,brands.tz,brands.plan_start,brands.plan_end,plans.name as pname,plans.amount, plans.type,timezone.name as tname from users,brands,plans,timezone where brands.masterid=users.id and brands.plan=plans.id and brands.tz=timezone.id and users.email='".$search_token."'";
+				$query = "SELECT users.fname,users.lname,users.email,users.joindate,users.id,brands.masterid,brands.id,brands.name,brands.pinterest,brands.facebook,brands.twitter,brands.instagram,brands.etsy,brands.plan,brands.stripe_customer,brands.stripe_subscription,brands.credits,brands.status,brands.joindate as bjoindate,brands.tz,brands.plan_start,brands.plan_end,plans.name as pname,plans.amount, plans.type,timezone.name as tname from users,brands,plans,timezone where brands.masterid=users.id and brands.plan=plans.id and brands.tz=timezone.id and users.email='".$search_token."'";
 				if(mysql_query($query) && mysql_num_rows(mysql_query($query)) > 0){
 					$result = mysql_query($query);
 					while($row = mysql_fetch_assoc($result)){
@@ -50,7 +50,7 @@
 			$query = "SELECT fname,lname,email,joindate,id from users where id=".$search_token;
 			$result = mysql_query($query);
 			if($result && mysql_num_rows($result)>0){
-				$query = "SELECT users.fname,users.lname,users.email,users.joindate,users.id,brands.masterid,brands.id,brands.name,brands.pinterest,brands.facebook,brands.twitter,brands.instagram,brands.etsy,brands.plan,brands.stripe_customer,brands.stripe_subscription,brands.credits,brands.status,brands.joindate,brands.tz,brands.plan_start,brands.plan_end,plans.name as pname,plans.amount, plans.type,timezone.name as tname from users,brands,plans,timezone where brands.masterid=users.id and brands.plan=plans.id and brands.tz=timezone.id and users.id=".$search_token;
+				$query = "SELECT users.fname,users.lname,users.email,users.joindate,users.id,brands.masterid,brands.id,brands.name,brands.pinterest,brands.facebook,brands.twitter,brands.instagram,brands.etsy,brands.plan,brands.stripe_customer,brands.stripe_subscription,brands.credits,brands.status,brands.joindate as bjoindate,brands.tz,brands.plan_start,brands.plan_end,plans.name as pname,plans.amount, plans.type,timezone.name as tname from users,brands,plans,timezone where brands.masterid=users.id and brands.plan=plans.id and brands.tz=timezone.id and users.id=".$search_token;
 				
 				if(mysql_query($query) && mysql_num_rows(mysql_query($query))>0){
 					$result = mysql_query($query);
@@ -160,12 +160,12 @@
 						$instagram_post++;
 					}
 				}
-				$data['ETSY_POST']['pinterest_post'] = $pinterest_post;
-				$data['ETSY_POST']['facebook_post'] = $facebook_post;
-				$data['ETSY_POST']['twitter_post'] = $twitter_post;
-				$data['ETSY_POST']['instagram_post'] = $instagram_post;
+				$data['ETSY_POST'][0]['pinterest_post'] = $pinterest_post;
+				$data['ETSY_POST'][0]['facebook_post'] = $facebook_post;
+				$data['ETSY_POST'][0]['twitter_post'] = $twitter_post;
+				$data['ETSY_POST'][0]['instagram_post'] = $instagram_post;
 			}
-
+		
 		}
 		// $i = 0;
 		// $result = mysql_query($query);echo mysql_error();

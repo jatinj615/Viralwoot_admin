@@ -253,12 +253,14 @@
           $('#activebots').empty();
           $('#tbodyposts').empty();
           $('#tbodybill').empty();
+          $('#tbodyetsypost').empty();
           $('#userstable').css('display','none');
           $('#accountstable').css('display','none');
           $('#brandstable').css('display','none');
           $('#botstable').css('display','none');
           $('#poststable').css('display','none');
           $('#lasttransaction').css('display','none');
+          $('#etsypost').css('display','none');
           var search_token = encodeURIComponent($("#search_token").val());
           var field = $('#sel1').find(":selected").text();
           
@@ -269,19 +271,18 @@
               // console.log(obj);
               if(obj['UBA'] != null && obj['UBA'].length>0){
                 $('#userstable').css('display','block');
-                $('#accountstable').css('display','block');
-                $('#brandstable').css('display','block');
+                if(field != "Name"){
+                  $('#tbody').html('<tr><td>'+obj['UBA'][0].id+'</td><td>'+obj['UBA'][0].fname+' '+obj['UBA'][0].lname+'</td><td>'+obj['UBA'][0].email+'</td><td>'+obj['UBA'][0].joindate+'</td></tr>');   
+                }
               for (var i = 0; i < obj['UBA'].length; i++) {
                 if(field == "Name"){
                   $('#tbody').append('<tr><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].fname+' '+obj['UBA'][i].lname+'</td><td>'+obj['UBA'][i].email+'</td><td>'+obj['UBA'][i].joindate+'</td></tr>');
                 }
-                else if(obj['UBA'][i].brands == 0){
-                  $('#tbody').append('<tr><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].fname+' '+obj['UBA'][i].lname+'</td><td>'+obj['UBA'][i].email+'</td><td>'+obj['UBA'][i].joindate+'</td></tr>');  
-                }
                 else if (obj['UBA'][i].brands == 1) {
                   // if()
-                  $('#tbody').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].fname+' '+obj['UBA'][i].lname+'</td><td>'+obj['UBA'][i].email+'</td><td>'+obj['UBA'][i].joindate+'</td></tr>');
-                  $('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].joindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td></tr>');
+                  $('#accountstable').css('display','block');
+                $('#brandstable').css('display','block');
+                  $('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].bjoindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td></tr>');
                   $('#tbodyaccounts').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].pinterest+'</td><td>'+obj['UBA'][i].facebook+'</td><td>'+obj['UBA'][i].twitter+'</td><td>'+obj['UBA'][i].instagram+'</td><td>'+obj['UBA'][i].etsy+'</td></tr>');
                 }
               }
@@ -312,10 +313,11 @@
                   $('#tbodybill').append('<tr><td>'+obj['BILL'][i].amount+'</td><td>'+obj['BILL'][i].payment_type+'</td><td>'+obj['BILL'][i].datetime+'</td></tr>')
                 }
               }
+              // console.log(obj['ETSY_POST'].length);
               if(obj['ETSY_POST'] != null && obj['ETSY_POST'].length > 0){
                 $('#etsypost').css('display','block');
                 for(var i = 0;i < obj['ETSY_POST'].length ; i++){
-                  
+                  $('#tbodyetsypost').append('<tr><td>'+obj['ETSY_POST'][0].pinterest_post+'</td><td>'+obj['ETSY_POST'][0].facebook_post+'</td><td>'+obj['ETSY_POST'][0].twitter_post+'</td><td>'+obj['ETSY_POST'][0].instagram_post+'</td></tr>');
                 }
               } 
             });
