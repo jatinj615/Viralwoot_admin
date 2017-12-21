@@ -1,3 +1,7 @@
+<?php
+  $search_token = $_GET['search_token'];
+  $field = $_GET['field'];
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,13 +22,10 @@
     <link rel="stylesheet" href="//cdn.viralwoot.com/v2/assets/css/style.css" type="text/css"/>
       </head>
   <body>
-    <div class="be-wrapper be-nosidebar-left">
-      <? include 'navbar.php';?>
-      <div class="be-content">
         
         <div class="main-content container-fluid">
           <div class="row">
-            <div class="col-xs-10 col-md-12">
+            <div class="col-md-12">
               
                 <div class="panel panel-default">
                   <div class="panel-body">
@@ -97,7 +98,7 @@
                         <th>Join Date</th>
                         <th>Plan Start</th>
                         <th>Plan End</th>
-                       
+                        <th>Update</th>
                       </tr>
                     </thead>
                     <tbody id="tbodybrands">
@@ -224,9 +225,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <? include 'footer.php';?>
     <script src="//cdn.viralwoot.com/v2/assets/lib/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="//cdn.viralwoot.com/v2/assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
     <script src="//cdn.viralwoot.com/v2/assets/js/main.js" type="text/javascript"></script>
@@ -240,11 +238,18 @@
       $(document).ready(function(){
       	//initialize the javascript
       	App.init();
-      	
+      	<?php
+          if(isset($field) && isset($search_token) && $field!= null && $search_token!=null){
+        ?>
+        search(<?php echo $search_token ?>, <?php echo $field ?>);
+        <?php
+          }
+        ?>
       	//Runs prettify
       	prettyPrint();
         // $('#myTable').DataTable();
         $('#search').click(function(){
+          $('#search').html('Searching...');
           $('#tbody').empty();
           $('#tbodybrands').empty();
           $('#tbodybots').empty();
@@ -265,15 +270,23 @@
           var field = $('#sel1').find(":selected").text();
           
           if(search_token != null){
-            $.post("api.php?search_token="+search_token+"&field="+field, function(data,status){
-              //console.log(data);
-              var obj = $.parseJSON(data);
-              // console.log(obj);
-              if(obj['UBA'] != null && obj['UBA'].length>0){
-                $('#userstable').css('display','block');
-                if(field != "Name"){
-                  $('#tbody').html('<tr><td>'+obj['UBA'][0].id+'</td><td>'+obj['UBA'][0].fname+' '+obj['UBA'][0].lname+'</td><td>'+obj['UBA'][0].email+'</td><td>'+obj['UBA'][0].joindate+'</td></tr>');   
-                }
+            search(search_token, field);
+          }
+        });
+      });
+    </script>
+    <script>
+      function search(search_token, field){
+        // console.log(field);
+          $.post("../api/api.php?search_token="+search_token+"&field="+field, function(data,status){
+            // console.log(status);
+            var obj = $.parseJSON(data);
+            // console.log(obj);
+            if(obj['UBA'] != null && obj['UBA'].length>0){
+              $('#userstable').css('display','block');
+              if(field != "Name"){
+                $('#tbody').html('<tr><td>'+obj['UBA'][0].masterid+'</td><td>'+obj['UBA'][0].fname+' '+obj['UBA'][0].lname+'</td><td>'+obj['UBA'][0].email+'</td><td>'+obj['UBA'][0].joindate+'</td></tr>');   
+              }
               for (var i = 0; i < obj['UBA'].length; i++) {
                 if(field == "Name"){
                   $('#tbody').append('<tr><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].fname+' '+obj['UBA'][i].lname+'</td><td>'+obj['UBA'][i].email+'</td><td>'+obj['UBA'][i].joindate+'</td></tr>');
@@ -281,49 +294,52 @@
                 else if (obj['UBA'][i].brands == 1) {
                   // if()
                   $('#accountstable').css('display','block');
-                $('#brandstable').css('display','block');
-                  $('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].bjoindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td></tr>');
+                  $('#brandstable').css('display','block');
+                  if(obj['UBA'][i].status == 0){
+                    $('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].bjoindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td><td><a href="update.php?token='+obj['UBA'][i].masterid+'&field='+field+'&brandid='+obj['UBA'][i].id+'" class="btn btn-info">Update</a></td></tr>');
+                  }else if (obj['UBA'][i].status == 2) {
+                    $('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].bjoindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td><td><a href="#" class="btn btn-info disabled">Update</a></td></tr>');
+                  }
                   $('#tbodyaccounts').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].pinterest+'</td><td>'+obj['UBA'][i].facebook+'</td><td>'+obj['UBA'][i].twitter+'</td><td>'+obj['UBA'][i].instagram+'</td><td>'+obj['UBA'][i].etsy+'</td></tr>');
                 }
               }
-              }
-              if(obj['BOT'] != null && obj['BOT'].length > 0){
-                $('#botstable').css('display','block');
-                $('#totalbots').append('Total Bots : '+obj['BOT'].length);
-                var activebots = 0;
-                for(var i = 0 ; i < obj['BOT'].length; i++){
-                  // console.log(obj['BOT'][i]);
-                  if(obj['BOT'][i].status == 0){
-                    activebots++;
-                  }
-                  $('#tbodybots').append('<tr><td>'+obj['BOT'][i].bot_id+'</td><td>'+obj['BOT'][i].bot_name+'</td><td>'+obj['BOT'][i].bot_network+'</td><td>'+obj['BOT'][i].status+'</td><td>'+obj['BOT'][i].cat_id+'</td><td>'+obj['BOT'][i].created_on+'</td><td>'+obj['BOT'][i].bot_last_run+'</td><td>'+obj['BOT'][i].bot_type+'</td></tr>');
+            }
+            if(obj['BOT'] != null && obj['BOT'].length > 0){
+              $('#botstable').css('display','block');
+              $('#totalbots').append('Total Bots : '+obj['BOT'].length);
+              var activebots = 0;
+              for(var i = 0 ; i < obj['BOT'].length; i++){
+                // console.log(obj['BOT'][i]);
+                if(obj['BOT'][i].status == 0){
+                  activebots++;
                 }
-                $('#activebots').append('Active Bots : '+activebots);  
+                $('#tbodybots').append('<tr><td>'+obj['BOT'][i].bot_id+'</td><td>'+obj['BOT'][i].bot_name+'</td><td>'+obj['BOT'][i].bot_network+'</td><td>'+obj['BOT'][i].status+'</td><td>'+obj['BOT'][i].cat_id+'</td><td>'+obj['BOT'][i].created_on+'</td><td>'+obj['BOT'][i].bot_last_run+'</td><td>'+obj['BOT'][i].bot_type+'</td></tr>');
               }
-              if(obj['POST'] != null && obj['POST'].length > 0){
-                $('#poststable').css('display','block');
-                for(var i = 0 ; i < obj['POST'].length ; i++){
-                  var totalposts = obj['POST'][i].autopost_insta+obj['POST'][i].autopins+obj['POST'][i].autopost_fb+obj['POST'][i].autopost_tw;
-                  $('#tbodyposts').append('<tr><td>'+obj['POST'][i].autopins+'</td><td>'+obj['POST'][i].autopost_fb+'</td><td>'+obj['POST'][i].autopost_tw+'</td><td>'+obj['POST'][i].autopost_insta+'</td><td>'+totalposts+'</td></tr>');
-                }
+              $('#activebots').append('Active Bots : '+activebots);  
+            }
+            if(obj['POST'] != null && obj['POST'].length > 0){
+              $('#poststable').css('display','block');
+              for(var i = 0 ; i < obj['POST'].length ; i++){
+                var totalposts = obj['POST'][i].autopost_insta+obj['POST'][i].autopins+obj['POST'][i].autopost_fb+obj['POST'][i].autopost_tw;
+                $('#tbodyposts').append('<tr><td>'+obj['POST'][i].autopins+'</td><td>'+obj['POST'][i].autopost_fb+'</td><td>'+obj['POST'][i].autopost_tw+'</td><td>'+obj['POST'][i].autopost_insta+'</td><td>'+totalposts+'</td></tr>');
               }
-              if(obj['BILL'] != null && obj['BILL'].length > 0){
-                $('#lasttransaction').css('display','block');
-                for(var i = 0 ; i < 1 ; i++){
-                  $('#tbodybill').append('<tr><td>'+obj['BILL'][i].amount+'</td><td>'+obj['BILL'][i].payment_type+'</td><td>'+obj['BILL'][i].datetime+'</td></tr>')
-                }
+            }
+            if(obj['BILL'] != null && obj['BILL'].length > 0){
+              $('#lasttransaction').css('display','block');
+              for(var i = 0 ; i < 1 ; i++){
+                $('#tbodybill').append('<tr><td>'+obj['BILL'][i].amount+'</td><td>'+obj['BILL'][i].payment_type+'</td><td>'+obj['BILL'][i].datetime+'</td></tr>')
               }
-              // console.log(obj['ETSY_POST'].length);
-              if(obj['ETSY_POST'] != null && obj['ETSY_POST'].length > 0){
-                $('#etsypost').css('display','block');
-                for(var i = 0;i < obj['ETSY_POST'].length ; i++){
-                  $('#tbodyetsypost').append('<tr><td>'+obj['ETSY_POST'][0].pinterest_post+'</td><td>'+obj['ETSY_POST'][0].facebook_post+'</td><td>'+obj['ETSY_POST'][0].twitter_post+'</td><td>'+obj['ETSY_POST'][0].instagram_post+'</td></tr>');
-                }
-              } 
-            });
-          }
-        });
-      });
+            }
+            // console.log(obj['ETSY_POST'].length);
+            if(obj['ETSY_POST'] != null && obj['ETSY_POST'].length > 0){
+              $('#etsypost').css('display','block');
+              for(var i = 0;i < obj['ETSY_POST'].length ; i++){
+                $('#tbodyetsypost').append('<tr><td>'+obj['ETSY_POST'][0].pinterest_post+'</td><td>'+obj['ETSY_POST'][0].facebook_post+'</td><td>'+obj['ETSY_POST'][0].twitter_post+'</td><td>'+obj['ETSY_POST'][0].instagram_post+'</td></tr>');
+              }
+            } 
+            $('#search').html('Search');
+          });
+      }
     </script>
   </body>
 </html>

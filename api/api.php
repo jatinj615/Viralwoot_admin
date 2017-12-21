@@ -77,7 +77,7 @@
 				}
 			}
 		}elseif($field == "brandid"){
-			$query = "SELECT users.fname,users.lname,users.email,users.joindate,users.id,brands.masterid,brands.id,brands.name,brands.pinterest,brands.facebook,brands.twitter,brands.instagram,brands.etsy,brands.plan,brands.stripe_customer,brands.stripe_subscription,brands.credits,brands.status,brands.joindate,brands.tz,brands.plan_start,brands.plan_end,plans.name as pname,plans.amount, plans.type,timezone.name as tname from users,brands,plans,timezone where brands.masterid=users.id and brands.plan=plans.id and brands.tz=timezone.id and brands.id=".$search_token;
+			$query = "SELECT users.fname,users.lname,users.email,users.joindate,users.id,brands.masterid,brands.id,brands.name,brands.pinterest,brands.facebook,brands.twitter,brands.instagram,brands.etsy,brands.plan,brands.stripe_customer,brands.stripe_subscription,brands.credits,brands.status,brands.joindate as bjoindate,brands.tz,brands.plan_start,brands.plan_end,plans.name as pname,plans.amount, plans.type,timezone.name as tname from users,brands,plans,timezone where brands.masterid=users.id and brands.plan=plans.id and brands.tz=timezone.id and brands.id=".$search_token;
 			// echo $query;
 			$result = mysql_query($query);
 			//echo mysql_num_rows($result);
@@ -145,7 +145,8 @@
 				$facebook_post = 0;
 				$twitter_post = 0;
 				$instagram_post = 0;
-				$time = date("Y-m-d H:i:s",strtotime('0000-00-00 00:00:00'));
+				$time = '0000-00-00 00:00:00';
+				// echo $time;
 				while($row = mysql_fetch_assoc($result)){
 					if($row['pinterest_time'] != $time ){
 						$pinterest_post++; 
