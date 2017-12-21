@@ -119,8 +119,10 @@
 					$query = "SELECT amount,payment_type,datetime from billing_logs where brandid=".$search_token." ORDER BY datetime DESC";
 					$result = mysql_query($query);
 					if($result && mysql_num_rows($result) > 0){
+						$j=0;
 						while ($row = mysql_fetch_assoc($result)) {
-							$data['BILL'][$i] = $row;	
+							$data['BILL'][$j] = $row;
+							$j++; 	
 						}
 					}
 					$data['UBA'][$i]['brands'] = 1;
@@ -135,6 +137,33 @@
 					$data['BOT'][$i] = $row;
 					$i++;
 				}
+			}
+			$query = "SELECT pinterest_time,facebook_time,twitter_time,instagram_time from etsy_bot_feed where brandid=".$search_token;
+			$result = mysql_query($query);
+			if($result && mysql_num_rows($result) > 0 ){
+				$pinterest_post = 0;
+				$facebook_post = 0;
+				$twitter_post = 0;
+				$instagram_post = 0;
+				$time = date("Y-m-d H:i:s",strtotime('0000-00-00 00:00:00'));
+				while($row = mysql_fetch_assoc($result)){
+					if($row['pinterest_time'] != $time ){
+						$pinterest_post++; 
+					}
+					if($row['facebook_time'] != $time ){
+						$facebook_post++;
+					}
+					if($row['twitter_time'] != $time ){
+						$twitter_post++;
+					}
+					if($row['instagram_time'] != $time ){
+						$instagram_post++;
+					}
+				}
+				$data['ETSY_POST']['pinterest_post'] = $pinterest_post;
+				$data['ETSY_POST']['facebook_post'] = $facebook_post;
+				$data['ETSY_POST']['twitter_post'] = $twitter_post;
+				$data['ETSY_POST']['instagram_post'] = $instagram_post;
 			}
 
 		}

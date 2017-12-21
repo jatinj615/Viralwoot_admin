@@ -24,35 +24,35 @@
         
         <div class="main-content container-fluid">
           <div class="row">
-            <div class="col-xs-8 col-md-12">
-              <div class="panel panel-default">
-                <div class="panel-heading"></div>
-                <div class="panel-body">
-                  <div class="col-sm-12">
-                        <div class="input-group form-inline">
-                          <div class="col-xs-7">
-                            <input class="form-control" type="text" id="search_token">  
-                          </div>
-                          
-                            <div class="col-xs-5">
-                            <select class="form-control" id="sel1">
-                                <option>Name</option>
-                                <option>Email</option>
-                                <option>MasterId</option>
-                                <option>BrandId</option>
-                              </select>
-  
+            <div class="col-xs-10 col-md-12">
+              
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <div class="col-sm-12" style="margin-top: 1em">
+                          <div class="input-group">
+                            <div class="col-xs-7">
+                              <input class="form-control" type="text" id="search_token">  
                             </div>
-                            <span class="input-group-btn">
                             
-                              <button type="button" class="btn btn-primary" id="search">Search</button>    
-                            
-                          </span>
-                      </div>
+                              <div class="col-xs-5">
+                              <select class="form-control" id="sel1">
+                                  <option>Name</option>
+                                  <option>Email</option>
+                                  <option>MasterId</option>
+                                  <option>BrandId</option>
+                                </select>
+    
+                              </div>
+                              <span class="input-group-btn">
+                              
+                                <button type="button" class="btn btn-primary" id="search">Search</button>    
+                              
+                            </span>
+                        </div>
+                    </div>
                   </div>
-                  <br>
-                  <br><br>
-              <div class="col-sm-12">
+                </div>
+              <div class="col-sm-12" id="userstable" style="display: none;">
               <div class="panel panel-default panel-table">
                 <div class="panel-heading">Users Table
                   
@@ -74,7 +74,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-12" id="brandstable" style="display: none;">
               <div class="panel panel-default panel-table">
                 <div class="panel-heading">Brands Table
                   
@@ -106,7 +106,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-12" id="accountstable" style="display: none;">
               <div class="panel panel-default panel-table">
                 <div class="panel-heading">Accounts Table
                 </div>
@@ -129,7 +129,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-12" id="botstable" style="display: none;">
               <div class="panel panel-default panel-table">
                 <div class="panel-heading">Bots Table
                 </div>
@@ -158,7 +158,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-12" id="poststable" style="display: none;">
               <div class="panel panel-default panel-table">
                 <div class="panel-heading">Posts Table
                 </div>
@@ -179,7 +179,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-12" id="lasttransaction" style="display: none;">
               <div class="panel panel-default panel-table">
                 <div class="panel-heading">Last Transaction
                 </div>
@@ -193,6 +193,26 @@
                       </tr>
                     </thead>
                     <tbody id="tbodybill">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12" id="etsypost" style="display: none;">
+              <div class="panel panel-default panel-table">
+                <div class="panel-heading">Etsy Posts
+                </div>
+                  <div class="panel-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Pinterest Post</th>
+                        <th>Facebook Post</th>
+                        <th>Twitter Post</th>
+                        <th>Instagram Post</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbodyetsypost">
                     </tbody>
                   </table>
                 </div>
@@ -233,6 +253,12 @@
           $('#activebots').empty();
           $('#tbodyposts').empty();
           $('#tbodybill').empty();
+          $('#userstable').css('display','none');
+          $('#accountstable').css('display','none');
+          $('#brandstable').css('display','none');
+          $('#botstable').css('display','none');
+          $('#poststable').css('display','none');
+          $('#lasttransaction').css('display','none');
           var search_token = encodeURIComponent($("#search_token").val());
           var field = $('#sel1').find(":selected").text();
           
@@ -242,6 +268,9 @@
               var obj = $.parseJSON(data);
               // console.log(obj);
               if(obj['UBA'] != null && obj['UBA'].length>0){
+                $('#userstable').css('display','block');
+                $('#accountstable').css('display','block');
+                $('#brandstable').css('display','block');
               for (var i = 0; i < obj['UBA'].length; i++) {
                 if(field == "Name"){
                   $('#tbody').append('<tr><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].fname+' '+obj['UBA'][i].lname+'</td><td>'+obj['UBA'][i].email+'</td><td>'+obj['UBA'][i].joindate+'</td></tr>');
@@ -258,6 +287,7 @@
               }
               }
               if(obj['BOT'] != null && obj['BOT'].length > 0){
+                $('#botstable').css('display','block');
                 $('#totalbots').append('Total Bots : '+obj['BOT'].length);
                 var activebots = 0;
                 for(var i = 0 ; i < obj['BOT'].length; i++){
@@ -270,16 +300,24 @@
                 $('#activebots').append('Active Bots : '+activebots);  
               }
               if(obj['POST'] != null && obj['POST'].length > 0){
+                $('#poststable').css('display','block');
                 for(var i = 0 ; i < obj['POST'].length ; i++){
                   var totalposts = obj['POST'][i].autopost_insta+obj['POST'][i].autopins+obj['POST'][i].autopost_fb+obj['POST'][i].autopost_tw;
                   $('#tbodyposts').append('<tr><td>'+obj['POST'][i].autopins+'</td><td>'+obj['POST'][i].autopost_fb+'</td><td>'+obj['POST'][i].autopost_tw+'</td><td>'+obj['POST'][i].autopost_insta+'</td><td>'+totalposts+'</td></tr>');
                 }
               }
               if(obj['BILL'] != null && obj['BILL'].length > 0){
-                for(var i = 0 ; i < obj['BILL'].length ; i++){
+                $('#lasttransaction').css('display','block');
+                for(var i = 0 ; i < 1 ; i++){
                   $('#tbodybill').append('<tr><td>'+obj['BILL'][i].amount+'</td><td>'+obj['BILL'][i].payment_type+'</td><td>'+obj['BILL'][i].datetime+'</td></tr>')
                 }
               }
+              if(obj['ETSY_POST'] != null && obj['ETSY_POST'].length > 0){
+                $('#etsypost').css('display','block');
+                for(var i = 0;i < obj['ETSY_POST'].length ; i++){
+                  
+                }
+              } 
             });
           }
         });
