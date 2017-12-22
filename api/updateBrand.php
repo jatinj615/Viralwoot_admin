@@ -11,6 +11,17 @@
 			$row = mysql_fetch_assoc($result);
 			$data['UBA'][$i] = $row;
 		}
+		$query = "SELECT id,name,amount,type from plans";
+		$result = mysql_query($query);
+		if($result && mysql_num_rows($result) > 0){
+			$i = 0;
+			while($row = mysql_fetch_assoc($result)){
+				$data['PLANS'][$i] = $row;
+				$i++;
+			}
+		}
 		echo json_encode($data);
-	}	
+	}else{
+		echo "Error";
+	}
 ?>

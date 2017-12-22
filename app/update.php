@@ -139,11 +139,13 @@
               </div>
               <div class="modal-body">
                 <div class="text-center">
-                  <h3>Update Credits</h3>
-                  <input type="text" name="updateCredit" id="credits">
-                  <div class="xs-mt-50"> 
-    				
-                  	<button id="creditsUpdate" type="button" data-dismiss="modal" class="btn btn-space btn-primary">Update</button>
+                  <h3>Update Plan</h3><br>
+                  <div>
+                    <b>Current Plan :</b><p id="currentPlan"></p> 
+                  </div>
+                  <div class="xs-mt-50">
+    				        
+                  	<button id="planUpdate" type="button" data-dismiss="modal" class="btn btn-space btn-primary">Update</button>
                     <button type="button" data-dismiss="modal" class="btn btn-space btn-default">Cancel</button>
                   </div>
                 </div>
@@ -215,9 +217,17 @@
 					}
 				});
 			$('#removeBrand').click(function(){
-
+				$.post('../api/removeBrand.php?token=<?php echo $brandid?>',function(data,status){
+					if(data == "Success"){
+						<?php header("Location: index.php?search_token=$token&field=$field");?>
+					}else{
+						alert("Something Went Wrong..");
+					}
+				});
 			});
-
+      $('#planUpdate').click(function(){
+        $.post('../api/p')
+      });
 			});
 		// $("#modalbtn").on("click",function(){
 		// 	$("#md-default").modal({backdrop:'static'});
@@ -238,6 +248,10 @@
 				// console.log(this.obj['UBA'][i].credits);
 				$('#credits').val(this.obj['UBA'][i].credits);
 				// console.log(this.obj);
+        $('#currentPlan').html(this.obj['UBA'][i].pname+' $'+this.obj['UBA'][i].amount+' '+this.obj['UBA'][i].type);
+        for( i = 0 ; i < this.obj['PLANS'].length ; i++){
+
+        }
 				});
 			
 
