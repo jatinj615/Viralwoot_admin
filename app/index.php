@@ -240,8 +240,11 @@
       	App.init();
       	<?php
           if(isset($field) && isset($search_token) && $field!= null && $search_token!=null){
+          
         ?>
-        search(<?php echo $search_token ?>, <?php echo $field ?>);
+        $('#search_token').val(<?php echo $search_token ?>);
+        $('#sel1').val("<?php echo $field ?>");
+        search(<?php echo $search_token ?>,"<?php echo $field ?>");
         <?php
           }
         ?>
@@ -292,11 +295,18 @@
                   $('#tbody').append('<tr><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].fname+' '+obj['UBA'][i].lname+'</td><td>'+obj['UBA'][i].email+'</td><td>'+obj['UBA'][i].joindate+'</td></tr>');
                 }
                 else if (obj['UBA'][i].brands == 1) {
-                  // if()
                   $('#accountstable').css('display','block');
                   $('#brandstable').css('display','block');
                   if(obj['UBA'][i].status == 0){
-                    $('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].bjoindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td><td><a href="update.php?token='+obj['UBA'][i].masterid+'&field='+field+'&brandid='+obj['UBA'][i].id+'" class="btn btn-info">Update</a></td></tr>');
+                    var token;
+                    if(field=="MasterId"){
+                    token = obj['UBA'][i].masterid;
+                    }else if (field == "Email") {
+                      token = obj['UBA'][0].email;
+                    }else if (field == "BrandId") {
+                      token = obj['UBA'][i].id;
+                    }
+                    $('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].bjoindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td><td><a href="update.php?token='+token+'&field='+field+'&brandid='+obj['UBA'][i].id+'" class="btn btn-info">Update</a></td></tr>');
                   }else if (obj['UBA'][i].status == 2) {
                     $('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].bjoindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td><td><a href="#" class="btn btn-info disabled">Update</a></td></tr>');
                   }

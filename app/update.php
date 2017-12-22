@@ -82,12 +82,42 @@
               </div>
             </div>
           </div>
+          <div class="col-sm-12">
+          	<button class="btn btn-primary" data-toggle="modal" data-target="#md-credits" type="button">Change Credits</button>
+          	<button class="btn btn-primary" data-toggle="modal" data-target="#md-default" type="button">Change Plan</button>
+          	<button class="btn btn-danger" data-toggle="modal" data-target="#md-default" type="button">Remove Brand</button>
+          	<a href="index.php?search_token=<?php echo $token?>&field=<?php echo $field?>" class="btn btn-primary pull-right">Back</a>
+          </div>
         </div>
         </div>
     </div>
 	</div>
       </div>
     </div>
+<div id="md-credits" tabindex="-1" role="dialog" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="mdi mdi-close"></span></button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <h3>Update Credits</h3>
+              <input type="text" name="updateCredit" id="credits">
+              <div class="xs-mt-50"> 
+				
+              	<button id="creditsUpdate" type="button" data-dismiss="modal" class="btn btn-space btn-primary">Update</button>
+                <button type="button" data-dismiss="modal" class="btn btn-space btn-default">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+   <div class="modal-overlay"></div> 
+
+
 	<script src="//cdn.viralwoot.com/v2/assets/lib/jquery/jquery.min.js" type="text/javascript"></script>
 	<script src="//cdn.viralwoot.com/v2/assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
 	<script src="//cdn.viralwoot.com/v2/assets/js/main.js" type="text/javascript"></script>
@@ -95,19 +125,38 @@
 	<script src="//cdn.viralwoot.com/v2/assets/lib/prettify/prettify.js" type="text/javascript"></script>
 	<script src="//cdn.viralwoot.com/v2/assets/lib/datatables/js/jquery.dataTables.min.js" type="text/javascript"></script>
 	<script src="//cdn.viralwoot.com/v2/assets/lib/datatables/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 	<script>
 		$(document).ready(function(){
+			App.init();
+			userDetails(<?php echo $brandid?>);
+			$('#creditsUpdate').click(function(){
+					var credits = $('#credits').val();
+					if(credits != obj['UBA'][i].credits){
+						$.post()
+					}else{
+						alert("Nothing To Update..!");
+					}
+				});
+
+			});
+		// $("#modalbtn").on("click",function(){
+		// 	$("#md-default").modal({backdrop:'static'});
+		// 	$("#modal-upgrade-warning").modal('show');
+		// })
+		
+	</script>
+	<script>
+		function userDetails(token){
 			$.post('../api/updateBrand.php?token=<?php echo $brandid?>', function(data,status){
 				obj = $.parseJSON(data);
 				var i = 0;
 				$('#tbody').html('<tr><td>'+obj['UBA'][0].masterid+'</td><td>'+obj['UBA'][0].fname+' '+obj['UBA'][0].lname+'</td><td>'+obj['UBA'][0].email+'</td><td>'+obj['UBA'][0].joindate+'</td></tr>');
 				$('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].bjoindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td></tr>');
 				$('#heading').empty();
-			});
-		});
-
+				// console.log(obj['UBA'][i].credits);
+				$('#credits').val(obj['UBA'][i].credits);
+				});
+		}
 	</script>
 </body>
 </html>
