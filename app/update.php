@@ -28,7 +28,7 @@
       <div class="row">
         <div class="col-md-12">
         	<div class="panel panel-default">
-        	  <div class="panel-body">
+           	  <div class="panel-body">
         	  	<div class="panel-heading text-center" id="heading"></div>
 		<div class="col-sm-12" id="userstable">
         <div class="panel panel-default panel-table">
@@ -86,7 +86,7 @@
           	<button class="btn btn-primary" data-toggle="modal" data-target="#md-credits" type="button">Change Credits</button>
           	<button class="btn btn-primary" data-toggle="modal" data-target="#md-plans" type="button">Change Plan</button>
           	<button class="btn btn-danger" data-toggle="modal" data-target="#md-remove" type="button">Remove Brand</button>
-          	<a href="index.php?search_token=<?php echo $token?>&field=<?php echo $field?>" class="btn btn-primary pull-right">Back</a>
+          	<a href="index.php?search_token=<?php echo $token?>&field=<?php echo $field?>" class="btn btn-primary pull-right">Back</a>	
           </div>
         </div>
         </div>
@@ -103,10 +103,26 @@
           <div class="modal-body">
             <div class="text-center">
               <h3>Update Credits</h3>
-              <input type="text" name="updateCredit" id="credits">
+              <input type="text" name="updateCredit" id="credits"><br><br><br>
+              <div>
+              	
+              
+              <div role="alert" id="notifSuccess" class="alert alert-success alert-icon alert-icon-border alert-dismissible" style="display: none;">
+                                  <div class="icon"><span class="mdi mdi-check"></span></div>
+                                  <div class="message">
+                                   <strong>Success!</strong> User Information Updated...
+                                  </div>
+                                </div>
+              <div role="alert" id="notifFail" class="alert alert-warning alert-icon alert-icon-border alert-dismissible" style="display: none">
+                                  <div class="icon" id="notifImage"><span class="mdi mdi-alert-triangle"></span></div>
+                                  <div class="message">
+                                    <strong>Failed..</strong> Nothing to Update..!
+                                  </div>
+                                </div>
+				</div>
               <div class="xs-mt-50"> 
 				
-              	<button id="creditsUpdate" type="button" data-dismiss="modal" class="btn btn-space btn-primary">Update</button>
+              	<button id="creditsUpdate" type="button" class="btn btn-space btn-primary">Update</button>
                 <button type="button" data-dismiss="modal" class="btn btn-space btn-default">Cancel</button>
               </div>
             </div>
@@ -144,11 +160,11 @@
                   </div>
                   <div class="modal-body">
                     <div class="text-center">
-                      <h3>Update Credits</h3>
-                      <input type="text" name="updateCredit" id="credits">
+                      <h3>Are You Sure ??</h3>
+                      
                       <div class="xs-mt-50"> 
         				
-                      	<button id="creditsUpdate" type="button" data-dismiss="modal" class="btn btn-space btn-primary">Update</button>
+                      	<button id="removeBrand" type="button" data-dismiss="modal" class="btn btn-space btn-danger">Confirm</button>
                         <button type="button" data-dismiss="modal" class="btn btn-space btn-default">Cancel</button>
                       </div>
                     </div>
@@ -183,12 +199,24 @@
 							// console.log("works");
 						$.post('../api/updateCredits.php?token=<?php echo $brandid?>&credits='+newCredits,function(data,status){
 							// console.log(data);
-							userDetails(<?php echo $brandid?>);
+							if (data == "Success") {
+								userDetails(<?php echo $brandid?>);
+								$('#notifFail').css('display','none');
+								$('#notifSuccess').css('display','');
+								
+							}else{
+								alert("Something Went Wrong..");
+							}
+
 						});
 					}else{
-						alert("Nothing To Update..!");
+						$('#notifFail').css('display','');
+						$('#notifSuccess').css('display','none');
 					}
 				});
+			$('#removeBrand').click(function(){
+
+			});
 
 			});
 		// $("#modalbtn").on("click",function(){
