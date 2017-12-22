@@ -84,8 +84,8 @@
           </div>
           <div class="col-sm-12">
           	<button class="btn btn-primary" data-toggle="modal" data-target="#md-credits" type="button">Change Credits</button>
-          	<button class="btn btn-primary" data-toggle="modal" data-target="#md-default" type="button">Change Plan</button>
-          	<button class="btn btn-danger" data-toggle="modal" data-target="#md-default" type="button">Remove Brand</button>
+          	<button class="btn btn-primary" data-toggle="modal" data-target="#md-plans" type="button">Change Plan</button>
+          	<button class="btn btn-danger" data-toggle="modal" data-target="#md-remove" type="button">Remove Brand</button>
           	<a href="index.php?search_token=<?php echo $token?>&field=<?php echo $field?>" class="btn btn-primary pull-right">Back</a>
           </div>
         </div>
@@ -115,6 +115,48 @@
         </div>
       </div>
     </div>
+    <div id="md-plans" tabindex="-1" role="dialog" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="mdi mdi-close"></span></button>
+              </div>
+              <div class="modal-body">
+                <div class="text-center">
+                  <h3>Update Credits</h3>
+                  <input type="text" name="updateCredit" id="credits">
+                  <div class="xs-mt-50"> 
+    				
+                  	<button id="creditsUpdate" type="button" data-dismiss="modal" class="btn btn-space btn-primary">Update</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-space btn-default">Cancel</button>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+        <div id="md-remove" tabindex="-1" role="dialog" class="modal fade">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="mdi mdi-close"></span></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="text-center">
+                      <h3>Update Credits</h3>
+                      <input type="text" name="updateCredit" id="credits">
+                      <div class="xs-mt-50"> 
+        				
+                      	<button id="creditsUpdate" type="button" data-dismiss="modal" class="btn btn-space btn-primary">Update</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-space btn-default">Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer"></div>
+                </div>
+              </div>
+            </div>
    <div class="modal-overlay"></div> 
 
 
@@ -137,8 +179,10 @@
 					var newCredits = $('#credits').val();
 					// console.log(newCredits);
 					if(newCredits != oldCredits){
+
+							// console.log("works");
 						$.post('../api/updateCredits.php?token=<?php echo $brandid?>&credits='+newCredits,function(data,status){
-							
+							// console.log(data);
 							userDetails(<?php echo $brandid?>);
 						});
 					}else{
@@ -154,9 +198,10 @@
 		function userDetails(token){
 			var obj;
 				$('#heading').html('Loading...');
-			$.post('../api/updateBrand.php?token='+token, function(data,status){
 				$('#tbody').empty();
 				$('#tbodybrands').empty();
+			$.post('../api/updateBrand.php?token='+token, function(data,status){
+				
 				this.obj = $.parseJSON(data);
 				var i = 0;
 				$('#tbody').html('<tr><td>'+this.obj['UBA'][0].masterid+'</td><td>'+this.obj['UBA'][0].fname+' '+this.obj['UBA'][0].lname+'</td><td>'+this.obj['UBA'][0].email+'</td><td>'+this.obj['UBA'][0].joindate+'</td></tr>');
