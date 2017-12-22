@@ -29,7 +29,7 @@
         <div class="col-md-12">
         	<div class="panel panel-default">
         	  <div class="panel-body">
-        	  	<div class="panel-heading text-center" id="heading">Loading....</div>
+        	  	<div class="panel-heading text-center" id="heading"></div>
 		<div class="col-sm-12" id="userstable">
         <div class="panel panel-default panel-table">
             <div class="panel-heading">Users Table
@@ -129,10 +129,18 @@
 		$(document).ready(function(){
 			App.init();
 			userDetails(<?php echo $brandid?>);
+			// console.log(obj);
+			var oldCredits = $('#credits').val();
+			// console.log(oldCredits);
 			$('#creditsUpdate').click(function(){
-					var credits = $('#credits').val();
-					if(credits != obj['UBA'][i].credits){
-						$.post()
+				// console.log(oldCredits);
+					var newCredits = $('#credits').val();
+					// console.log(newCredits);
+					if(newCredits != oldCredits){
+						$.post('../api/updateCredits.php?token=<?php echo $brandid?>&credits='+newCredits,function(data,status){
+							
+							userDetails(<?php echo $brandid?>);
+						});
 					}else{
 						alert("Nothing To Update..!");
 					}
@@ -143,19 +151,23 @@
 		// 	$("#md-default").modal({backdrop:'static'});
 		// 	$("#modal-upgrade-warning").modal('show');
 		// })
-		
-	</script>
-	<script>
 		function userDetails(token){
-			$.post('../api/updateBrand.php?token=<?php echo $brandid?>', function(data,status){
-				obj = $.parseJSON(data);
+			var obj;
+				$('#heading').html('Loading...');
+			$.post('../api/updateBrand.php?token='+token, function(data,status){
+				$('#tbody').empty();
+				$('#tbodybrands').empty();
+				this.obj = $.parseJSON(data);
 				var i = 0;
-				$('#tbody').html('<tr><td>'+obj['UBA'][0].masterid+'</td><td>'+obj['UBA'][0].fname+' '+obj['UBA'][0].lname+'</td><td>'+obj['UBA'][0].email+'</td><td>'+obj['UBA'][0].joindate+'</td></tr>');
-				$('#tbodybrands').append('<tr><td>'+obj['UBA'][i].masterid+'</td><td>'+obj['UBA'][i].id+'</td><td>'+obj['UBA'][i].name+'</td><td>'+obj['UBA'][i].pname+'</td><td>'+'$'+obj['UBA'][i].amount+'</td><td>'+obj['UBA'][i].type+'</td><td>'+obj['UBA'][i].tname+'</td><td>'+obj['UBA'][i].stripe_customer+'</td><td>'+obj['UBA'][i].stripe_subscription+'</td><td>'+obj['UBA'][i].credits+'</td><td>'+obj['UBA'][i].status+'</td><td>'+obj['UBA'][i].bjoindate+'</td><td>'+obj['UBA'][i].plan_start+'</td><td>'+obj['UBA'][i].plan_end+'</td></tr>');
+				$('#tbody').html('<tr><td>'+this.obj['UBA'][0].masterid+'</td><td>'+this.obj['UBA'][0].fname+' '+this.obj['UBA'][0].lname+'</td><td>'+this.obj['UBA'][0].email+'</td><td>'+this.obj['UBA'][0].joindate+'</td></tr>');
+				$('#tbodybrands').html('<tr><td>'+this.obj['UBA'][i].masterid+'</td><td>'+this.obj['UBA'][i].id+'</td><td>'+this.obj['UBA'][i].name+'</td><td>'+this.obj['UBA'][i].pname+'</td><td>'+'$'+this.obj['UBA'][i].amount+'</td><td>'+this.obj['UBA'][i].type+'</td><td>'+this.obj['UBA'][i].tname+'</td><td>'+this.obj['UBA'][i].stripe_customer+'</td><td>'+this.obj['UBA'][i].stripe_subscription+'</td><td id="oldCredits">'+this.obj['UBA'][i].credits+'</td><td>'+this.obj['UBA'][i].status+'</td><td>'+this.obj['UBA'][i].bjoindate+'</td><td>'+this.obj['UBA'][i].plan_start+'</td><td>'+this.obj['UBA'][i].plan_end+'</td></tr>');
 				$('#heading').empty();
-				// console.log(obj['UBA'][i].credits);
-				$('#credits').val(obj['UBA'][i].credits);
+				// console.log(this.obj['UBA'][i].credits);
+				$('#credits').val(this.obj['UBA'][i].credits);
+				// console.log(this.obj);
 				});
+			
+
 		}
 	</script>
 </body>
