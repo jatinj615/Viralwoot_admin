@@ -141,11 +141,28 @@
                 <div class="text-center">
                   <h3>Update Plan</h3><br>
                   <div>
-                    <b>Current Plan :</b><p id="currentPlan"></p> 
+                    <p><b>Current Plan : </b><span id="currentPlan"></span></p> 
                   </div>
+    				         <div class="form-group xs-mt-50">
+                      <label for="sel1">Select New Plan:</label>
+                      <select class="form-control text-center" id="sel1">
+                        <option selected disable hidden>---Select New Plan---</option>
+                        </select>
+                    </div>
+                    <div role="alert" id="notifPlanSuccess" class="alert alert-success alert-icon alert-icon-border alert-dismissible" style="display: none;">
+                                        <div class="icon"><span class="mdi mdi-check"></span></div>
+                                        <div class="message">
+                                         <strong>Success!</strong> User Plan Updated...
+                                        </div>
+                                      </div>
+                    <div role="alert" id="notifPlanFail" class="alert alert-warning alert-icon alert-icon-border alert-dismissible" style="display: none">
+                                        <div class="icon" id="notifImage"><span class="mdi mdi-alert-triangle"></span></div>
+                                        <div class="message">
+                                          <strong>Failed..</strong> Nothing to Update..!
+                                        </div>
+                                      </div>
                   <div class="xs-mt-50">
-    				        
-                  	<button id="planUpdate" type="button" data-dismiss="modal" class="btn btn-space btn-primary">Update</button>
+                  	<button id="planUpdate" type="button" class="btn btn-space btn-primary">Update</button>
                     <button type="button" data-dismiss="modal" class="btn btn-space btn-default">Cancel</button>
                   </div>
                 </div>
@@ -225,8 +242,34 @@
 					}
 				});
 			});
+
       $('#planUpdate').click(function(){
-        $.post('../api/p')
+        var currentPlan = $('#currentPlan').text();
+        var newPlan = $('#sel1').val();
+        // console.log(newPlan);
+        // console.log(currentPlan);
+        if(newPlan != "---Select New Plan---"){
+          if(newPlan != currentPlan){
+            var blockId = newPlan.slice(0,newPlan.indexOf(':')-1);
+            var id = parseInt(blockId);
+
+            // console.log(id);
+            $.post('../api/updatePlan.php?$token=<?php echo $brandid?>&planid='+id,function(data,status){
+              if(data == "Success"){
+                userDetails(<?php echo $brandid?>);
+                $('#notifPlanFail').css('display','none');
+                $('#notifPlanSuccess').css('display','');
+              }else{
+                alert("Something went wrong .. ");
+              }
+            });
+          }else{
+            $('#notifPlanFail').css('display','');
+            $('#notifPlanSuccess').css('display','none');
+          }
+        }else{
+          alert("No option Selected");
+        }
       });
 			});
 		// $("#modalbtn").on("click",function(){
@@ -242,19 +285,31 @@
 				
 				this.obj = $.parseJSON(data);
 				var i = 0;
+        // console.log(this.obj['UBA'].type);
+        if(this.obj['UBA'][i].type == 1){
+          this.obj['UBA'][i].type = "Monthly";
+        }else if (this.obj['UBA'][i].type == 2) {
+          this.obj['UBA'][i].type = "Annual";          
+        }
 				$('#tbody').html('<tr><td>'+this.obj['UBA'][0].masterid+'</td><td>'+this.obj['UBA'][0].fname+' '+this.obj['UBA'][0].lname+'</td><td>'+this.obj['UBA'][0].email+'</td><td>'+this.obj['UBA'][0].joindate+'</td></tr>');
 				$('#tbodybrands').html('<tr><td>'+this.obj['UBA'][i].masterid+'</td><td>'+this.obj['UBA'][i].id+'</td><td>'+this.obj['UBA'][i].name+'</td><td>'+this.obj['UBA'][i].pname+'</td><td>'+'$'+this.obj['UBA'][i].amount+'</td><td>'+this.obj['UBA'][i].type+'</td><td>'+this.obj['UBA'][i].tname+'</td><td>'+this.obj['UBA'][i].stripe_customer+'</td><td>'+this.obj['UBA'][i].stripe_subscription+'</td><td id="oldCredits">'+this.obj['UBA'][i].credits+'</td><td>'+this.obj['UBA'][i].status+'</td><td>'+this.obj['UBA'][i].bjoindate+'</td><td>'+this.obj['UBA'][i].plan_start+'</td><td>'+this.obj['UBA'][i].plan_end+'</td></tr>');
 				$('#heading').empty();
 				// console.log(this.obj['UBA'][i].credits);
 				$('#credits').val(this.obj['UBA'][i].credits);
 				// console.log(this.obj);
-        $('#currentPlan').html(this.obj['UBA'][i].pname+' $'+this.obj['UBA'][i].amount+' '+this.obj['UBA'][i].type);
+        
+        $('#currentPlan').append(this.obj['UBA'][i].pname+' / $'+this.obj['UBA'][i].amount+' / '+this.obj['UBA'][i].type);
         for( i = 0 ; i < this.obj['PLANS'].length ; i++){
-
+            if(this.obj['PLANS'][i].type == 1){
+              this.obj['PLANS'][i].type = "Monthly";
+            }else if (this.obj['PLANS'][i].type == 2) {
+              this.obj['PLANS'][i].type = "Annual";
+            }
+            // console.log(this.obj['PLANS'][i]);
+            $('#sel1').append('<option><p>'+this.obj['PLANS'][i].id+' : </p>'+this.obj['PLANS'][i].name+' / $'+this.obj['PLANS'][i].amount+' / '+this.obj['PLANS'][i].type+'</option>');
         }
 				});
 			
-
 		}
 	</script>
 </body>
